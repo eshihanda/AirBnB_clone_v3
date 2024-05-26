@@ -21,6 +21,6 @@ def teardown_db(self):
 
 
 if __name__ == '__main__':
-    host_vr = getenv('HBNB_API_HOST', '0.0.0.0')
-    port_vr = int(getenv('HBNB_API_PORT', 5000))
+    host_vr = getenv('HBNB_API_HOST')
+    port_vr = int(getenv('HBNB_API_PORT'))
     app.run(host=host_vr, port=port_vr, threaded=True)
