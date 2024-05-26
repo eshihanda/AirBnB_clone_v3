@@ -24,7 +24,7 @@ def not_found(error):
     """
     handles the default 404 request
     """
-    return jsonify(make_response({"error": "Not found"})), 404
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 if __name__ == '__main__':
     host_vr = getenv('HBNB_API_HOST')
