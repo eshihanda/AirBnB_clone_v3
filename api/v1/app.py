@@ -3,7 +3,7 @@
 create a flask api and mark its blueprint to an instance
 """
 
-from flask import Flask, make_reponse
+from flask import Flask, make_response, jsonify
 from models import storage
 from os import getenv
 from api.v1.views import app_views
@@ -20,11 +20,11 @@ def teardown_db(self):
     storage.close()
 
 @app.errorhandler(404)
-def not_found():
+def not_found(error):
     """
     handles the default 404 request
     """
-    return jsonify(make_response({"error": "Not found"}, 404))
+    return jsonify(make_response({"error": "Not found"})), 404
 
 if __name__ == '__main__':
     host_vr = getenv('HBNB_API_HOST')
