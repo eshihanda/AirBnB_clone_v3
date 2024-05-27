@@ -93,7 +93,8 @@ class DBStorage:
                         return value
 
         else:
-            return None
+            return
+        return
         
     
     def count(self, cls=None):
