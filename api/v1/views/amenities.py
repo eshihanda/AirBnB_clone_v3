@@ -6,7 +6,7 @@ handles the amenities route
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models.amenity import Amenity
-from models import base_model, storage
+from models import storage
 
 
 @app_views.route('/amenities', strict_slashes=False)
