@@ -13,7 +13,7 @@ from models.state import State
 from models.user import User
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
-        "Place": Place, "Review": Review, "State": State, "User": User}
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class FileStorage:
@@ -69,43 +69,23 @@ class FileStorage:
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
-<<<<<<< HEAD
-
-=======
->>>>>>> b543e2d763d0d090a75eb648815c5d88b2bc417d
+    
     def get(self, cls, id):
         """
         a method to retrieve an object
         """
-<<<<<<< HEAD
+
         if cls and id:
-            if cls in classes.values():
+            if cls in classes.values() and isinstance(id, str):
                 my_objects = self.all(cls)
-
                 for key, value in my_objects.items():
-                    key_id = key.split('.')[1]
-                        if key_id == id:
-                            print('this is value')
-                            return value
+                    if key.split('.')[1] == 'id':
+                        return value
 
-            else:
-                print('class not found')
-                return None
         else:
-            print('class not passed')
             return None
-
-
-=======
-
-        all_objects = self.all(cls)
-        if all_objects is not {}:
-            for obj in all_objects.values():
-                if id == obj.id:
-                    return obj
-        return None
-
->>>>>>> b543e2d763d0d090a75eb648815c5d88b2bc417d
+        
+    
     def count(self, cls=None):
         """
         counts number of objects in storage
@@ -116,3 +96,4 @@ class FileStorage:
                 return len(available_class)
         if cls not in classes.values():
             return
+
