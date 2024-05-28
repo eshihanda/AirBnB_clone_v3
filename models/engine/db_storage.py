@@ -83,29 +83,15 @@ class DBStorage:
         """
         a method to retrieve an object
         """
-
-<<<<<<< HEAD
         if cls and id:
-            if cls in classes.values() and isinstance(id, str):
-                my_objects = self.all(cls)
+            all_objects = self.all(cls)
+            if all_objects is not {}:
+                for obj in all_objects.values():
+                    if id == obj.id:
+                        return obj
+            return None
 
-                for key, value in my_objects.items():
-                    if key.split('.')[1] == 'id':
-                        return value
 
-            return
-        return
-        
-    
-=======
-        all_objects = self.all(cls)
-        if all_objects is not {}:
-            for obj in all_objects.values():
-                if id == obj.id:
-                    return obj
-        return None
-
->>>>>>> b543e2d763d0d090a75eb648815c5d88b2bc417d
     def count(self, cls=None):
         """
         counts number of objects in storage
