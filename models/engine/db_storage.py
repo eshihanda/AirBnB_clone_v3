@@ -88,11 +88,11 @@ class DBStorage:
         if cls and id:
             if cls in classes.values() and isinstance(id, str):
                 my_objects = self.all(cls)
+
                 for key, value in my_objects.items():
                     if key.split('.')[1] == 'id':
                         return value
 
-        else:
             return
         return
         
@@ -101,9 +101,12 @@ class DBStorage:
         """
         counts number of objects in storage
         """
-        if cls:
-            if cls in classes.values():
-                available_class = self.all(cls)
-                return len(available_class)
+        if not cls:
+            all_classes = self.all(cls)
+            return len(all_classes)
+
+        if cls in classes.values():
+            available_class = self.all(cls)
+            return len(available_class)
         if cls not in classes.values():
             return
