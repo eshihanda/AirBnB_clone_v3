@@ -56,13 +56,13 @@ def add_state():
     uploads a state
     """
     if request.content_type != 'application/json':
-        return abort(404, 'Not a JSON')
+        return abort(400, 'Not a JSON')
     if not request.get_json():
-        return abort(404, 'Not a JSON')
+        return abort(400, 'Not a JSON')
     kwargs = request.get_json()
 
     if 'name' not in kwargs:
-        abort(404, 'Missing name')
+        abort(400, 'Missing name')
     state = State(**kwargs)
     state.save()
     return jsonify(state.to_dict()), 201
