@@ -39,14 +39,12 @@ def delete_amAmenity(amenity_id):
     """
     deletes amenity
     """
-    amenity = storage.all(Amenity)
-    for amenity in amenity.values():
-        if amenity.id == amenity_id:
-            storage.delete(amenity)
-            storage.save()
-            return jsonify({}), 200
-        else:
-            return abort(404)
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    storage.delete(amenity)
+    storage.save()
+    return jsonify({}), 200
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
