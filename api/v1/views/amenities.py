@@ -73,20 +73,15 @@ def update_amenity(amenity_id):
     """
     updates the details inAmenity
     """
-    if request.content_type != 'application/json':
-        return abort(404, 'Not a JSON')
-    amenities = storage.all(Amenity)
-    for amenity in amenities.values():
-        if amenity.id == amenity_id:
-            if not request.get_json():
-                return abort(404, 'Not a JSON')
-            result_json = request.get_json()
-
-            jump_keys = ['id', 'created_at', 'updated_at']
-            for key, value in result_json.items():
-                if key not in jump_keys:
-                    setattr(amenity, key, value)
-                    amenity.save()
-                return jsonify(amenity.to_dict()), 200
-        else:
-            return abort(404)
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    if not request.is_json:
+        abort(400, 'Not a JSON')
+    data = request.get_json()
+    ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
+    for key, value in data.items():
+        if key not in ignore_keys:
+            setattr(amenity, key, value)
+            amenity.save()
+    return jsonify(amenity.to_dict()), 200
