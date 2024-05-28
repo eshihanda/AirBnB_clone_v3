@@ -18,12 +18,12 @@ def get_cities_by_state(state_id=None):
     """
     state = storage.all(State)
     all_state = []
-    if state is not {} and state_id is not None:
+    if state and state_id:
         for state in state.values():
             if state.id == state_id:
                 for city in state.cities:
                     all_state.append(city.to_dict())
-                return jsonify(res)
+                return jsonify(all_state)
 
     abort(404)
 
@@ -33,11 +33,13 @@ def get_cities(city_id=None):
     """
     get city object based on city_id
     """
-    city = storage.get(City, city_id)
-    if city is not None:
-        return jsonify(city.to_dict())
-
-    abort(404)
+    cities = storage.all(City)
+    for key, value in cities.items():
+        my_city_id = key.split('.')[1]
+        if my_city_id == city_id:
+            return jsonify(value.to_dict())
+    else:
+        return abort(404)
 
 
 @app_views.route('/cities/<city_id>', strict_slashes=False,
