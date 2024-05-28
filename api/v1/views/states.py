@@ -20,32 +20,34 @@ def all_states():
     return jsonify(state_list)
 
 
-@app_views.route('/states/<int:state_id>', strict_slashes=False)
+@app_views.route('/states/<state_id>', strict_slashes=False)
 def states_id(state_id):
     """
     fetches all states per their id
     """
-    state = storage.get(State, state_id)
-    if state:
-        return jsonify(state.to_dict())
+    state = storage.all(State)
+    for key, value in state.items():
+        my_state_id = key.split('.')[1]
+        if my_state_id == state_id:
+            return jsonify(value.to_dict())
     else:
         return abort(404)
 
 
-@app_views.route('/states/<int:state_id>', methods=['DELETE'],
+@app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state(state_id):
     """
-    delets a state
+    deletes a state
     """
-    state = storage.get(State, state_id)
-    if state:
-        storage.delete(state)
-        storage.save()
-        return jsonify({}), 200
-
-    else:
-        return abort(404)
+    states = storage.all(State)
+    for state in states.values():
+        if state.id == state_id:
+            storage.delete(state)
+            storage.save()
+            return jsonify({}), 200
+        else:
+            return abort(404)
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -74,17 +76,18 @@ def update_state(state_id):
     """
     if request.content_type != 'application/json':
         return abort(404, 'Not a JSON')
-    state = storage.get(State, state_id)
-    if state:
-        if not request.get_json():
-            return abort(404, 'Not a JSON')
-        result_json = request.get_json()
+    states = storage.all(State)
+    for state in states.values():
+        if state.id == state_id:
+            if not request.get_json():
+                return abort(404, 'Not a JSON')
+            result_json = request.get_json()
 
-        jump_keys = ['id', 'created_at', 'updated_at']
-        for key, value in result_json.items():
-            if key not in jump_keys:
-                setattr(state, key, value)
-            state.save()
-            return jsonify(state.to_dict()), 200
-    else:
-        return abort(404)
+            jump_keys = ['id', 'created_at', 'updated_at']
+            for key, value in result_json.items():
+                if key not in jump_keys:
+                    setattr(state, key, value)
+                    state.save()
+                return jsonify(state.to_dict()), 200
+        else:
+            return abort(404)
