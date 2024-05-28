@@ -8,6 +8,7 @@ from flask import jsonify, abort, request
 from models.amenity import Amenity
 from models import base_model, storage
 
+
 @app_views.route('/amenities', strict_slashes=False)
 def all_amenities():
     """
