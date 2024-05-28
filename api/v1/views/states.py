@@ -75,12 +75,12 @@ def update_state(state_id):
     updates the details in state
     """
     if request.content_type != 'application/json':
-        return abort(404, 'Not a JSON')
+        return abort(400, 'Not a JSON')
     states = storage.all(State)
     for state in states.values():
         if state.id == state_id:
             if not request.get_json():
-                return abort(404, 'Not a JSON')
+                return abort(400, 'Not a JSON')
             result_json = request.get_json()
 
             jump_keys = ['id', 'created_at', 'updated_at']
